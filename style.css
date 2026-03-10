@@ -1,0 +1,22 @@
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #1f2937; }
+::-webkit-scrollbar-thumb { background: #06b6d4; border-radius: 4px; }
+
+/* Neon Glow Effects */
+.neon-cyan { box-shadow: 0 0 10px #06b6d4, 0 0 20px #06b6d4, 0 0 30px #06b6d4; }
+.neon-lime { box-shadow: 0 0 10px #84cc16, 0 0 20px #84cc16, 0 0 30px #84cc16; }
+
+/* Autocomplete Dropdown */
+.autocomplete-dropdown {
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+.autocomplete-dropdown.active { display: block; }
+.autocomplete-item:hover { background-color: #374151; }
+
+/* Canvas Container */
+#canvas-container {
+    background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+}

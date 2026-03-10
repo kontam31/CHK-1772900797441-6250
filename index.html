@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Navigator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <header class="bg-gray-800/80 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-lime-400 bg-clip-text text-transparent">
+                    Campus Navigator
+                </h1>
+            </div>
+            <div class="text-sm text-gray-400">Find your way around campus</div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col lg:flex-row gap-6">
+        <div class="flex-1">
+            <div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
+                <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-cyan-400">Campus Map</h2>
+                    <div class="flex gap-4 text-sm">
+                        <span class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-gray-600"></span> Normal
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-cyan-400 shadow-lg shadow-cyan-400/50"></span> Selected
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-lime-400 shadow-lg shadow-lime-400/50"></span> Path
+                        </span>
+                    </div>
+                </div>
+                <div id="canvas-container" class="relative">
+                    <img id="backgroundMapImage" 
+                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='550' viewBox='0 0 800 550'%3E%3Crect fill='%23111827' width='800' height='550'/%3E%3Ctext fill='%236b7280' font-family='Arial' font-size='14' x='400' y='275' text-anchor='middle'%3E📍 Upload your campus map image here%3C/text%3E%3Ctext fill='%234b5563' font-family='Arial' font-size='12' x='400' y='300' text-anchor='middle'%3EReplace the 'src' attribute with your image path%3C/text%3E%3C/svg%3E" 
+                         alt="Campus Map Background"
+                         class="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none">
+                    <canvas id="campusCanvas"></canvas>
+                </div>
+                
+                <div id="mapPreviewModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4">
+                    <div class="bg-gray-800 rounded-xl border border-gray-700 max-w-4xl w-full max-h-[90vh] overflow-auto">
+                        <div class="p-4 border-b border-gray-700 flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-cyan-400">Campus Map Preview</h3>
+                            <button id="closePreviewBtn" class="text-gray-400 hover:text-white">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="p-4">
+                            <img id="mapPreviewImage" class="w-full h-auto rounded-lg" src="" alt="Campus Map">
+                        </div>
+                        <div class="p-4 border-t border-gray-700 flex gap-3">
+                            <a id="downloadMapBtn" class="flex-1 bg-cyan-500 hover:bg-cyan-600 text-gray-900 font-semibold py-2 px-4 rounded-lg transition-all text-center block">
+                                Download Image
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 border-t border-gray-700">
+                    <button id="showMapBtn" class="w-full bg-gradient-to-r from-lime-500 to-lime-600 hover:from-lime-400 hover:to-lime-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-all hover:shadow-lg hover:shadow-lime-500/25">
+                        📸 View Map Image
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-full lg:w-96 space-y-4">
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-5">
+                <h3 class="text-lg font-semibold text-cyan-400 mb-3">How to Use</h3>
+                <div class="space-y-2 text-sm text-gray-400">
+                    <div class="flex items-start gap-2">
+                        <span class="w-5 h-5 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0 text-xs">1</span>
+                        <p>Click a location on the map or use the search boxes below</p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-5 h-5 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0 text-xs">2</span>
+                        <p>Select <strong class="text-gray-300">Start</strong> and <strong class="text-gray-300">Destination</strong></p>
+                    </div>
+                    <div class="flex items-start gap-2">
+                        <span class="w-5 h-5 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center flex-shrink-0 text-xs">3</span>
+                        <p>Click <strong class="text-gray-300">Find Path</strong> to see the route</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-5">
+                <h3 class="text-lg font-semibold text-cyan-400 mb-4">Find Location</h3>
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-400 mb-2">Start Location</label>
+                    <div class="relative">
+                        <input type="text" id="startInput" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all" placeholder="Select starting point...">
+                        <div id="startDropdown" class="autocomplete-dropdown absolute top-full left-0 right-0 bg-gray-700 border border-gray-600 rounded-lg mt-1 z-50"></div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm text-gray-400 mb-2">Destination</label>
+                    <div class="relative">
+                        <input type="text" id="destInput" class="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-gray-100 placeholder-gray-500 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-all" placeholder="Select destination...">
+                        <div id="destDropdown" class="autocomplete-dropdown absolute top-full left-0 right-0 bg-gray-700 border border-gray-600 rounded-lg mt-1 z-50"></div>
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button id="findPathBtn" class="flex-1 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-all hover:shadow-lg hover:shadow-cyan-500/25">Find Path</button>
+                    <button id="clearBtn" class="px-4 py-3 bg-gray-700 hover:bg-gray-600 border border-gray-600 rounded-lg transition-all">Clear</button>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-5">
+                <h3 class="text-lg font-semibold text-lime-400 mb-4">Directions</h3>
+                <div id="directionsPanel" class="space-y-2 max-h-80 overflow-y-auto">
+                    <p class="text-gray-500 text-sm italic">Enter start and destination to see directions...</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl border border-gray-700 p-5">
+                <h3 class="text-lg font-semibold text-gray-300 mb-3">Locations</h3>
+                <div id="legendList" class="grid grid-cols-2 gap-2 text-sm"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
